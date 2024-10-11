@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<body>
+    <h1>Algorithm List</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Algorithm Name</th>
+                <th>Minimum Fund Required</th>
+                <th>Algorithm Logic</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for algo in algos %}
+            <tr>
+                <td>{{ algo.id }}</td>
+                <td>{{ algo.AlgoName }}</td>
+                <td>{{ algo.Minimum_Fund_Reqd }}</td>
+                <td>{{ algo.Algo_logic }}</td>
+                <td>
+                    <a href="{{ url_for('main.edit_algo', id=algo.id) }}">Edit</a>
+                    
+                    <form method="post" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this algorithm?');" action="{{ url_for('main.delete_algo', id=algo.id) }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+{% endblock %}

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <!-- Include necessary CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        /* Your custom styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .box {
+            width: 150px;
+            height: 150px;
+            margin: 20px;
+            display: inline-block;
+            text-align: center;
+            position: relative;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .box-heading {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .box-subheading {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .box-icons {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .action-icon {
+            font-size: 24px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .box-registered {
+            background-color: orange;
+        }
+
+        .box-run {
+            background-color: lightgreen;
+        }
+
+        .box-not-registered {
+            background-color: #ccc;
+        }
+
+        .registration-form-container, .run-form-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #333;
+            padding: 30px;
+            border-radius: 5px;
+            z-index: 1000;
+            width: 400px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            background-color: #fff;
+            border: 4px solid #041A73;
+        }
+
+        .form-container h2 {
+            font-size: 24px;
+            margin-top: 0;
+            text-align: center;
+            background-color: #041A73;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .form-container .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-container .form-group label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .form-container .form-group input[type="text"],
+        .form-container .form-group input[type="number"],
+        .form-container .form-group select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-sizing: border-box;
+        }
+
+        .form-container .form-group input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            background-color: #041A73;
+            color: #fff;
+            border: none;
+            border-radius: 0 0 5px 5px;
+            cursor: pointer;
+        }
+
+        .form-container .form-group input[type="submit"]:hover {
+            background-color: #2b6cb0;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    
+    <p class="title">
+        Welcome, {{name}}!
+    </p>
+    
+    <div class="container" id="box-container">
+        <h2>Live Algos</h2>
+        <!-- Boxes will be dynamically added here -->
+        {% for box in boxes %}
+            <div class="box {% if box.status == 'registered' %} box-registered {% elif box.status == 'run' %} box-run {% else %} box-not-registered {% endif %}" 
+                 data-heading="{{ box.heading }}" 
+                 data-subheading1="{{ box.subheading1 }}" 
+                 data-subheading2="{{ box.subheading2 }}">
+                <div class="box-content">
+                    <h3 class="box-heading">{{ box.heading }}</h3>
+                    <p class="box-subheading">{{ box.subheading1 }}</p>
+                    <p class="box-subheading">{{ box.subheading2 }}</p>
+                </div>
+                <div class="box-icons">
+                    {% if box.status == 'registered' %}
+                        <i class="fas fa-play fa-xs action-icon" onclick="actionHandler({{ box.id }}, 'play')"></i>
+                    {% elif box.status == 'run' %}
+                        <i class="fas fa-pause fa-xs action-icon" onclick="actionHandler({{ box.id }}, 'pause')"></i>
+                    {% else %}
+                        <i class="fas fa-plus-circle fa-xs action-icon" onclick="openRegistrationForm(this)"></i>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Registration Form -->
+    <div class="registration-form-container form-container" id="registrationForm">
+        <span class="close-btn" onclick="closeForm('registrationForm')">&times;</span>
+        <h2 id="registrationHeading">Algo Registration Form</h2>
+        <form id="AlgoRegistrationform" method="POST" action="/register_algo">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div class="form-group">
+                <label for="Algoname">Algo Name:</label>
+                <input type="text" id="Algoname" name="AlgoName" required>
+            </div>
+            <div class="form-group">
+                <label for="MinimumFundRequirement">Minimum fund required per lot size:</label>
+                <input type="number" id="MinimumFundRequirement" name="MinimumFundRequirement" required>
+            </div>
+            <div class="form-group">
+                <label for="SelectLotSize">Invest in Lot Size:</label>
+                <input type="number" id="SelectLotSize" name="SelectLotSize" required>
+            </div>
+            <div class="form-group">
+                <label for="SelectBroker">Select Broker:</label>
+                <div class="select is-large">
+                    <select id="SelectBroker" name="SelectBroker" required>
+                        <option value="" selected disabled>Select Broker</option>
+                        {% for broker in brokers %}
+                            <option value="{{ broker.BrokerName }}">{{ broker.BrokerName }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="BrokerClientID">Client Id/Username:</label>
+                <input type="text" id="BrokerClientID" name="BrokerClientID" required>
+            </div>
+            <div class="form-group">
+                <label for="ClientAPIKey">Broker API Key:</label>
+                <input type="text" id="ClientAPIKey" name="ClientAPIKey" required>
+            </div>
+            <div class="form-group">
+                <label for="ClientSecretKey">Broker Secret Key:</label>
+                <input type="text" id="ClientSecretKey" name="ClientSecretKey" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register">
+            </div>
+        </form>
+    </div>
+
+    <!-- Run Form -->
+    <div class="run-form-container form-container" id="runForm">
+        <span class="close-btn" onclick="closeForm('runForm')">&times;</span>
+        <h2 id="runHeading">Run Form</h2>
+        <form id="RunForm" method="POST" action="/run_algo">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div class="form-group">
+                <label for="AlgoNameRun">Algo Name:</label>
+                <input type="text" id="AlgoNameRun" name="AlgoNameRun" readonly>
+            </div>
+            <div class="form-group">
+                <label for="Authenticator">Authenticator:</label>
+                <input type="text" id="Authenticator" name="Authenticator" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Connect">
+            </div>
+        </form>
+    </div>
+       
+    <script>
+        function actionHandler(boxId, action) {
+            console.log(`Box ${boxId} clicked for ${action} action`);
+            // Implement your action handling logic here (e.g., using AJAX)
+            if (action === 'play') {
+                openRunForm();
+            } else if (action === 'pause') {
+                // Implement pause logic if needed
+            }
+        }
+
+        function openRegistrationForm() {
+            // Open registration form
+            document.getElementById('registrationForm').style.display = 'block';
+        }
+
+        function openRunForm() {
+            // Retrieve the data attributes from the clicked element's parent box
+            const box = document.querySelector('.box.box-registered'); // Adjust selector based on your logic
+            const heading = box.getAttribute('data-heading');
+            const subheading1 = box.getAttribute('data-subheading1');
+            
+            // Debugging: Log the values passed to the function
+            console.log(`openRunForm called with heading: ${heading}, subheading: ${subheading1}`);
+            
+            // Populate the Algo Name field with the box heading
+            document.getElementById('AlgoNameRun').value = heading;
+
+            // Update the form heading and subheading (if needed)
+            document.getElementById('runHeading').innerText = `Run Algo: ${heading}`;
+            //document.getElementById('formSubHeading').innerText = `Subheading: ${subheading1}`;
+            
+            // Show the run form
+            document.getElementById('runForm').style.display = 'block';
+        }
+
+        function closeForm(formId) {
+            document.getElementById(formId).style.display = 'none'; // Hide the form
+            document.getElementById(formId).reset(); // Reset form fields if needed
+        }
+    </script>
+</body>
+</html>

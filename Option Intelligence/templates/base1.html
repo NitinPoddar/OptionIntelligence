@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Option Intelligence</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    <!-- Bootstrap CSS for mobile navigation -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Include CodeMirror Python mode -->
+    <!-- Include CodeMirror library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+      /* Your custom styles here */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #fff;
+          margin: 0;
+          padding: 0;
+      }
+      .container {
+          max-width: 800px;
+          margin: 20px auto;
+          padding: 0 20px;
+      }
+
+      .box {
+          width: 150px;
+          height: 150px;
+          margin: 20px;
+          display: inline-block;
+          text-align: center;
+          position: relative;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          background-color: #f9f9f9;
+      }
+
+      .box-heading {
+          font-size: 18px;
+          margin-bottom: 5px;
+          color: #333;
+      }
+
+      .box-subheading {
+          font-size: 14px;
+          margin-bottom: 10px;
+          color: #666;
+      }
+
+      .box-icons {
+          position: absolute;
+          bottom: 10px;
+          left: 50%;
+          transform: translateX(-50%);
+      }
+
+      .action-icon {
+          font-size: 24px;
+          cursor: pointer;
+          margin: 0 10px;
+      }
+
+      .box-registered {
+          background-color: orange;
+      }
+
+      .box-run {
+          background-color: lightgreen;
+      }
+
+      .box-not-registered {
+          background-color: #ccc;
+      }
+
+      .registration-form-container, .run-form-container {
+          display: none;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: #333;
+          padding: 30px;
+          border-radius: 5px;
+          z-index: 1000;
+          width: 400px;
+          box-shadow: 0 0 10px rgba(0,0,0,0.3);
+          background-color: #fff;
+          border: 4px solid #041A73;
+      }
+
+      .form-container h2 {
+          font-size: 24px;
+          margin-top: 0;
+          text-align: center;
+          background-color: #041A73;
+          color: #fff;
+          padding: 10px;
+          border-radius: 5px 5px 0 0;
+      }
+
+      .form-container .form-group {
+          margin-bottom: 20px;
+      }
+
+      .form-container .form-group label {
+          display: block;
+          font-size: 16px;
+          margin-bottom: 5px;
+      }
+
+      .form-container .form-group input[type="text"],
+      .form-container .form-group input[type="number"],
+      .form-container .form-group select {
+          width: calc(100% - 20px);
+          padding: 10px;
+          font-size: 16px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          background-color: #fff;
+          box-sizing: border-box;
+      }
+
+      .form-container .form-group input[type="submit"] {
+          width: 100%;
+          padding: 12px;
+          font-size: 18px;
+          background-color: #041A73;
+          color: #fff;
+          border: none;
+          border-radius: 0 0 5px 5px;
+          cursor: pointer;
+      }
+
+      .form-container .form-group input[type="submit"]:hover {
+          background-color: #2b6cb0;
+      }
+
+      .close-btn {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          font-size: 20px;
+          cursor: pointer;
+      }
+
+      .close-btn:hover {
+          color: #ff0000;
+      }
+              .hero-logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        .hero-logo {
+            max-height: 200px; /* Adjust as needed */
+        }
+        .navbar-item.white-bold {
+            color: #ffffff; /* White text color */
+            font-weight: bold; /* Bold font weight */
+        }
+        .navbar-item.white-bold:hover {
+            color: #0064FF; /* Lighter color on hover */
+        }
+        .navbar {
+            padding: 1px; /* Adjust padding as needed */
+        }
+    </style>
+</head>
+
+<body>
+        <!-- Hero Head -->
+        <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation"
+        style="background-color: #041A73; z-index: 1000;">
+        <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="#">
+                    <!-- Your logo or brand -->
+                    <h1 class="title is-6 has-text-white">Option Intelligence</h1>
+                </a>
+                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                    data-target="navbarMenuHeroA">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+            <div id="navbarMenuHeroA" class="navbar-menu">
+                <div class="navbar-end">
+                    {% if current_user.is_authenticated %}
+                    <!-- User is logged in -->
+                    <a href="{{ url_for('main.profile') }}" class="navbar-item white-bold">Profile</a>
+                    <a href="{{ url_for('main.add_broker') }}" class="navbar-item white-bold">Add Broker</a>
+                    <a href="{{ url_for('main.add_algo') }}" class="navbar-item white-bold">Add Algo</a>
+                    <a href="{{ url_for('main.algo_list') }}" class="navbar-item white-bold">Algo List</a>
+                    <a href="{{ url_for('auth.logout') }}" class="navbar-item white-bold">Logout</a>
+                    {% else %}
+                    <!-- User is not logged in -->
+                    <a href="{{ url_for('auth.login') }}" class="navbar-item has-text-white">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+<section class="hero is-fullheight" style="background-color: #00000;">
+
+        <!-- Hero Body -->
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <div class="hero-logo-container">
+                    <!-- Centered logo -->
+                    <img class="hero-logo" src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+                </div>
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+</section>
+<!-- Bootstrap JS and jQuery for mobile navigation -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- CodeMirror JS (if needed) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js"></script>
+
+    <!-- Optional: Your custom scripts -->
+    <script>
+        // Your custom JavaScript code here, if any
+    </script>
+</body>
+
+</html>

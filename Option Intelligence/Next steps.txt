@@ -1,0 +1,5 @@
+1.Next step is to bring drop downs and fix values in algo register forms
+2. complete functionality for pause and play button
+3. start working on play button that is making connection to broker API
+4. execute python code from database
+5. build IDE in front end for user to write their own algo code

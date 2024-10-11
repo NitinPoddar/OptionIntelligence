@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Option</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .option-group {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .conditions {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        h3 {
+            margin: 0;
+        }
+        h4 {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add Option</h1>
+    <form action="{{ url_for('main.submit_option') }}" method="POST">
+        <label for="algorithm">Algorithm:</label>
+        <input type="text" id="algorithm" name="algorithm" required>
+        <label for="num_stocks">Number of Stocks:</label>
+        <input type="number" id="num_stocks" name="num_stocks" required>
+
+        <div id="options-container">
+            <div class="option-group" id="option-group-1">
+                <h3>Option 1</h3>
+                <label for="instrument_name_1">Instrument:</label>
+                <select id="instrument_name_1" name="instrument_name[]" required>
+                    <option value="">Select an instrument</option>
+                    {% for instrument in instruments %}
+                        <option value="{{ instrument.name }}" data-expiry="{{ instrument.expiry | join(',') }}">{{ instrument.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="expiry_date_1">Expiry Date:</label>
+                <select id="expiry_date_1" name="expiry_date[]" required>
+                    <option value="">Select an expiry date</option>
+                </select>
+
+                <label for="strike_price_1">Strike Price:</label>
+                <select id="strike_price_1" name="strike_price[]" required>
+                    <option value="Spot">Spot</option>
+                    <option value="OTM">OTM</option>
+                    <option value="SynthSpot">SynthSpot</option>
+                    <option value="Geeks">Geeks</option>
+                </select>
+
+                <label for="option_type_1">Option Type:</label>
+                <select id="option_type_1" name="option_type[]" required>
+                    <option value="Call">Call</option>
+                    <option value="Put">Put</option>
+                </select>
+
+                <div class="conditions">
+                    <h4>Entry Conditions:</h4>
+                    <div id="entry_conditions_1" class="entry-conditions">
+                        <textarea name="entry_condition[]" required placeholder="Enter entry condition..."></textarea>
+                    </div>
+                    <button type="button" onclick="addEntryCondition(1)">Add Another Entry Condition</button>
+
+                    <h4>Exit Conditions:</h4>
+                    <div id="exit_conditions_1" class="exit-conditions">
+                        <textarea name="exit_condition[]" required placeholder="Enter exit condition..."></textarea>
+                    </div>
+                    <button type="button" onclick="addExitCondition(1)">Add Another Exit Condition</button>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" onclick="addOption()">Add Another Option</button>
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        let optionCount = 1;
+
+        function updateExpiryDates(optionIndex) {
+            const instrumentSelect = document.getElementById(`instrument_name_${optionIndex}`);
+            const expirySelect = document.getElementById(`expiry_date_${optionIndex}`);
+            const selectedInstrument = instrumentSelect.options[instrumentSelect.selectedIndex];
+            const expiries = selectedInstrument.getAttribute('data-expiry');
+
+            expirySelect.innerHTML = '<option value="">Select an expiry date</option>'; // Clear previous options
+
+            if (expiries) {
+                const expiryDates = expiries.split(',');
+                expiryDates.forEach(expiry => {
+                    const option = document.createElement('option');
+                    option.value = expiry.trim();
+                    option.textContent = expiry.trim();
+                    expirySelect.appendChild(option);
+                });
+            }
+        }
+
+        // Event delegation for instrument changes
+        document.getElementById('options-container').addEventListener('change', function(event) {
+            if (event.target.matches('[id^="instrument_name_"]')) {
+                const optionIndex = event.target.id.split('_')[2];
+                updateExpiryDates(optionIndex);
+            }
+        });
+
+        function addOption() {
+            optionCount++;
+            const optionGroup = document.createElement('div');
+            optionGroup.className = 'option-group';
+            optionGroup.id = `option-group-${optionCount}`;
+            optionGroup.innerHTML = `
+                <h3>Option ${optionCount}</h3>
+                <label for="instrument_name_${optionCount}">Instrument:</label>
+                <select id="instrument_name_${optionCount}" name="instrument_name[]" required>
+                    <option value="">Select an instrument</option>
+                    {% for instrument in instruments %}
+                        <option value="{{ instrument.name }}" data-expiry="{{ instrument.expiry | join(',') }}">{{ instrument.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="expiry_date_${optionCount}">Expiry Date:</label>
+                <select id="expiry_date_${optionCount}" name="expiry_date[]" required>
+                    <option value="">Select an expiry date</option>
+                </select>
+
+                <label for="strike_price_${optionCount}">Strike Price:</label>
+                <select id="strike_price_${optionCount}" name="strike_price[]" required>
+                    <option value="Spot">Spot</option>
+                    <option value="OTM">OTM</option>
+                    <option value="SynthSpot">SynthSpot</option>
+                    <option value="Geeks">Geeks</option>
+                </select>
+
+                <label for="option_type_${optionCount}">Option Type:</label>
+                <select id="option_type_${optionCount}" name="option_type[]" required>
+                    <option value="Call">Call</option>
+                    <option value="Put">Put</option>
+                </select>
+
+                <div class="conditions">
+                    <h4>Entry Conditions:</h4>
+                    <div id="entry_conditions_${optionCount}" class="entry-conditions">
+                        <textarea name="entry_condition[]" required placeholder="Enter entry condition..."></textarea>
+                    </div>
+                    <button type="button" onclick="addEntryCondition(${optionCount})">Add Another Entry Condition</button>
+
+                    <h4>Exit Conditions:</h4>
+                    <div id="exit_conditions_${optionCount}" class="exit-conditions">
+                        <textarea name="exit_condition[]" required placeholder="Enter exit condition..."></textarea>
+                    </div>
+                    <button type="button" onclick="addExitCondition(${optionCount})">Add Another Exit Condition</button>
+                </div>
+            `;
+            document.getElementById('options-container').appendChild(optionGroup);
+        }
+
+        function addEntryCondition(optionIndex) {
+            const entryConditionsDiv = document.getElementById(`entry_conditions_${optionIndex}`);
+            const newCondition = document.createElement('textarea');
+            newCondition.name = 'entry_condition[]';
+            newCondition.required = true;
+            newCondition.placeholder = 'Enter entry condition...';
+            entryConditionsDiv.appendChild(newCondition);
+        }
+
+        function addExitCondition(optionIndex) {
+            const exitConditionsDiv = document.getElementById(`exit_conditions_${optionIndex}`);
+            const newCondition = document.createElement('textarea');
+            newCondition.name = 'exit_condition[]';
+            newCondition.required = true;
+            newCondition.placeholder = 'Enter exit condition...';
+            exitConditionsDiv.appendChild(newCondition);
+        }
+    </script>
+</body>
+</html>

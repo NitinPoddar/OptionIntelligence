@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Add Broker</h3>
+  
+<form method="POST" action="/add_broker">
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="text" name="BrokerName" placeholder="Broker Name" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="text" name="RootAPI" placeholder="Root API" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="text" name="ServerIP" placeholder="Server IP">
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <label for="AuthenticatorReq">Authenticator Required:</label>
+                    <div class="select is-large">
+                    <select id="AuthenticatorReq" name="AuthenticatorReq" required>    
+                            <option value=1>1</option>
+                            <option value=0>0</option>
+                    </select>                
+                </div>
+            </div>
+        
+            <div class="field">
+                <div class="control">
+                    <label for="PasswordReq">Password Required:</label>
+                    <div class="select is-large">
+                    <select id="PasswordReq" name="PasswordReq" required>    
+                            <option value=1>1</option>
+                            <option value=0>0</option>
+                    </select>                
+                </div>
+                </div>
+            </div>
+            <button class="button is-block is-info is-large is-fullwidth" style="background-color: #041A73;">Add Broker</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,102 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your App Title</title>
+    <!-- Include necessary CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Your custom styles here */
+        .box {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            border: 1px solid black;
+            display: inline-block;
+            text-align: center;
+        }
+        .box-content {
+            padding: 10px;
+        }
+        .box-icons {
+            margin-top: 10px;
+        }
+        .action-icon {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Include necessary JS libraries or scripts here -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/profile')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('content').innerHTML = `
+                        <h3>Welcome, ${data.name}!</h3>
+                        <div class="container" id="box-container">
+                            <!-- Boxes will be dynamically added here -->
+                        </div>
+                    `;
+                })
+                .then(() => {
+                    fetch('/boxes_data')
+                        .then(response => response.json())
+                        .then(data => generateBoxes(data))
+                        .catch(error => console.error('Error fetching boxes data:', error));
+                })
+                .catch(error => console.error('Error fetching profile data:', error));
+
+            function generateBoxes(boxes) {
+                var container = document.getElementById('box-container');
+                container.innerHTML = ''; // Clear previous content
+
+                boxes.forEach(function(box) {
+                    var div = document.createElement('div');
+                    div.classList.add('box');
+                    div.style.backgroundColor = box.color;
+
+                    var contentDiv = document.createElement('div');
+                    contentDiv.classList.add('box-content');
+                    contentDiv.innerHTML = '<p>' + box.content + '</p>';
+                    div.appendChild(contentDiv);
+
+                    var iconsDiv = document.createElement('div');
+                    iconsDiv.classList.add('box-icons');
+                    iconsDiv.innerHTML = `
+                        <i class="fas fa-${box.icon} fa-2x action-icon" onclick="actionHandler(${box.id}, '${box.icon}')"></i>
+                    `;
+                    div.appendChild(iconsDiv);
+
+                    container.appendChild(div);
+                });
+            }
+
+            function actionHandler(boxId, action) {
+                console.log(`Box ${boxId} clicked for ${action} action`);
+                fetch(`/perform_action/${boxId}/${action}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ box_id: boxId, action: action })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Response from server:', data);
+                    // Optionally update UI based on server response
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
+</body>
+</html>

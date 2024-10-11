@@ -1,0 +1,47 @@
+[E 240924 12:31:14 smartConnect:243] Error occurred while making a POST request to https://apiconnect.angelone.in/rest/secure/angelbroking/order/v1/getLtpData. Error: Failed to get symbol details. URL: https://apiconnect.angelone.in/rest/secure/angelbroking/order/v1/getLtpData, Headers: {'Content-type': 'application/json', 'X-ClientLocalIP': '127.0.0.1', 'X-ClientPublicIP': '106.193.147.98', 'X-MACAddress': 'd8:43:ae:50:24:9e', 'Accept': 'application/json', 'X-PrivateKey': 'h8UJWcxl', 'X-UserType': 'USER', 'X-SourceID': 'WEB'}, Request: {'exchange': 'NSE', 'tradingsymbol': 'BANKNIFTY', 'symboltoken': '41434'}, Response: {'message': 'Failed to get symbol details', 'errorcode': 'AB1018', 'status': False, 'data': None}
+[E 240924 12:31:20 smartConnect:243] Error occurred while making a POST request to https://apiconnect.angelone.in/rest/secure/angelbroking/order/v1/getLtpData. Error: Failed to get symbol details. URL: https://apiconnect.angelone.in/rest/secure/angelbroking/order/v1/getLtpData, Headers: {'Content-type': 'application/json', 'X-ClientLocalIP': '127.0.0.1', 'X-ClientPublicIP': '106.193.147.98', 'X-MACAddress': 'd8:43:ae:50:24:9e', 'Accept': 'application/json', 'X-PrivateKey': 'h8UJWcxl', 'X-UserType': 'USER', 'X-SourceID': 'WEB'}, Request: {'exchange': 'NSE', 'tradingsymbol': 'BANKNIFTY', 'symboltoken': '41434'}, Response: {'message': 'Failed to get symbol details', 'errorcode': 'AB1018', 'status': False, 'data': None}
+[E 240924 12:32:02 smartConnect:243] Error occurred while making a POST request to https://apiconnect.angelone.in/rest/secure/angelbroking/order/v1/getLtpData. Error: Failed to get symbol details. URL: https://apiconnect.angelone.in/rest/secure/angelbroking/order/v1/getLtpData, Headers: {'Content-type': 'application/json', 'X-ClientLocalIP': '127.0.0.1', 'X-ClientPublicIP': '106.193.147.98', 'X-MACAddress': 'd8:43:ae:50:24:9e', 'Accept': 'application/json', 'X-PrivateKey': 'h8UJWcxl', 'X-UserType': 'USER', 'X-SourceID': 'WEB'}, Request: {'exchange': 'NSE', 'tradingsymbol': 'BANKNIFTY', 'symboltoken': '41434'}, Response: {'message': 'Failed to get symbol details', 'errorcode': 'AB1018', 'status': False, 'data': None}
+[E 240924 12:34:43 smartConnect:243] Error occurred while making a POST request to https://apiconnect.angelone.in/rest/secure/angelbroking/order/v1/getLtpData. Error: Failed to get symbol details. URL: https://apiconnect.angelone.in/rest/secure/angelbroking/order/v1/getLtpData, Headers: {'Content-type': 'application/json', 'X-ClientLocalIP': '127.0.0.1', 'X-ClientPublicIP': '106.193.147.98', 'X-MACAddress': 'd8:43:ae:50:24:9e', 'Accept': 'application/json', 'X-PrivateKey': 'h8UJWcxl', 'X-UserType': 'USER', 'X-SourceID': 'WEB'}, Request: {'exchange': 'NSE', 'tradingsymbol': 'BANKNIFTY', 'symboltoken': '41434'}, Response: {'message': 'Failed to get symbol details', 'errorcode': 'AB1018', 'status': False, 'data': None}
+[E 240924 12:50:39 smartConnect:218] Error occurred while making a POST request to https://apiconnect.angelone.in/rest/secure/angelbroking/order/v1/getLtpData. Headers: {'Content-type': 'application/json', 'X-ClientLocalIP': '127.0.0.1', 'X-ClientPublicIP': '106.193.147.98', 'X-MACAddress': 'd8:43:ae:50:24:9e', 'Accept': 'application/json', 'X-PrivateKey': 'h8UJWcxl', 'X-UserType': 'USER', 'X-SourceID': 'WEB', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkEyMTgyNjYiLCJyb2xlcyI6MCwidXNlcnR5cGUiOiJVU0VSIiwidG9rZW4iOiJleUpoYkdjaU9pSlNVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKMWMyVnlYM1I1Y0dVaU9pSmpiR2xsYm5RaUxDSjBiMnRsYmw5MGVYQmxJam9pZEhKaFpHVmZZV05qWlhOelgzUnZhMlZ1SWl3aVoyMWZhV1FpT2pRc0luTnZkWEpqWlNJNklqTWlMQ0prWlhacFkyVmZhV1FpT2lJNE1UVmtOMkZsTkMwd016WmxMVE0zWmpVdE9UVmxZaTFqWkRRM01HTTJPRFkyTkRJaUxDSnJhV1FpT2lKMGNtRmtaVjlyWlhsZmRqRWlMQ0p2Ylc1bGJXRnVZV2RsY21sa0lqbzBMQ0p3Y205a2RXTjBjeUk2ZXlKa1pXMWhkQ0k2ZXlKemRHRjBkWE1pT2lKaFkzUnBkbVVpZlgwc0ltbHpjeUk2SW5SeVlXUmxYMnh2WjJsdVgzTmxjblpwWTJVaUxDSnpkV0lpT2lKQk1qRTRNalkySWl3aVpYaHdJam94TnpJM01qVTFOVFkzTENKdVltWWlPakUzTWpjeE5qQTNOakFzSW1saGRDSTZNVGN5TnpFMk1EYzJNQ3dpYW5ScElqb2laV1ZrWkRoall6UXRZVFkyTnkwME9EWmlMV0V6TUdFdE1UUTNNVEk1TldKbE5UVXhJbjAuZ3RBY2JyaXZ2dXVMUTRoODExOEJtQ2lBT3BocnlFTklEQ0p4dU83a3BZRFJXR2JsNGx0MGZCNEF2LU1aZnhIdWtiSnMteFdPTVpRMFlGNnBxSzhRN240Nks5NXdOWHlYYnVVeGFjZGhWdmxmTjJJX2RwMmhBWTdLS2I1dlZGdG1VWXcxbXpibnBta3RCLWJ5ZkJSU0ljQm5VSEh5YUkybTlEdXF5OHNWOGdZIiwiQVBJLUtFWSI6Img4VUpXY3hsIiwiaWF0IjoxNzI3MTYwODIwLCJleHAiOjE3MjcyNTU1Njd9.EHWCGfvNW1k-2IJcBIEmQd5Ve043WSxg8iLVFnM_NvFTGdQu511tn5Kad5Gv6dDGYVs8gvZcjFIpmPPWDasvYg'}, Request: {'exchange': 'NFO', 'tradingsymbol': 'BANKNIFTY', 'symboltoken': 24234    41434
+    24525    64211
+    24751    41367
+    24982    41356
+    25172    41588
+    25715    41466
+    26683    41481
+    26795    41658
+    28309    40552
+    29162    64213
+    30012    39667
+    30662    40508
+    31479    40517
+    31817    41399
+    32449    41358
+    34764    41541
+    36035    41354
+    37160    40545
+    37523    41421
+    37845    41432
+    38036    40521
+    41256    41629
+    41801    64215
+    41864    41401
+    42115    41363
+    42998    40638
+    44374    41361
+    47116    40513
+    47325    41436
+    48017    40627
+    49294    41438
+    49721    41446
+    50630    40491
+    50699    41427
+    51919    41415
+    54463    40542
+    55222    41450
+    55598    64217
+    56311    41448
+    56314    41455
+    0          NaN
+    1          NaN
+    Name: token, dtype: object}, Response: Object of type Series is not JSON serializable

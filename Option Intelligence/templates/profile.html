@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<body>
+    
+    <p class="title">
+        Welcome, {{name}}!
+    </p>
+    
+    <div class="container" id="box-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    
+        <h2>Live Algos</h2>
+        <!-- Boxes will be dynamically added here -->
+        {% for box in boxes %}
+            <div class="box {% if box.status == 'registered' %} box-registered {% elif box.status == 'run' %} box-run {% else %} box-not-registered {% endif %}" 
+                 data-heading="{{ box.heading }}" 
+                 data-subheading1="{{ box.subheading1 }}" 
+                 data-subheading2="{{ box.subheading2 }}">
+                <div class="box-content">
+                    <h3 class="box-heading">{{ box.heading }}</h3>
+                    <p class="box-subheading">{{ box.subheading1 }}</p>
+                    <p class="box-subheading">{{ box.subheading2 }}</p>
+                </div>
+                <div class="box-icons">
+                    {% if box.status == 'registered' %}
+                        <i class="fas fa-play fa-xs action-icon" onclick="actionHandler({{ box.id }}, 'play')"></i>
+                    {% elif box.status == 'run' %}
+                        <i class="fas fa-pause fa-xs action-icon" onclick="actionHandler({{ box.id }}, 'pause')"></i>
+                    {% else %}
+                        <i class="fas fa-plus-circle fa-xs action-icon" onclick="openRegistrationForm(this)"></i>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Registration Form -->
+    <div class="registration-form-container form-container" id="registrationForm">
+        <span class="close-btn" onclick="closeForm('registrationForm')">&times;</span>
+        <h2 id="registrationHeading">Algo Registration Form</h2>
+        <form id="AlgoRegistrationform" method="POST" action="/register_algo">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div class="form-group">
+                <label for="Algoname">Algo Name:</label>
+                <input type="text" id="Algoname" name="AlgoName" readonly>
+            </div>
+            <div class="form-group">
+                <label for="MinimumFundRequirement">Minimum fund required per lot size:</label>
+                <input type="number" id="MinimumFundRequirement" name="MinimumFundRequirement" readonly>
+            </div>
+            <div
+                <label for="SelectBroker">Select Broker:</label>
+                <div class="select is-large">
+                    <select id="SelectBroker" name="SelectBroker" required>
+                        <option value="" selected disabled>Select Broker</option>
+                        {% for broker in brokers %}
+                            <option value="{{ broker.BrokerName }}">{{ broker.BrokerName }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="BrokerClientID">Client Id/Username:</label>
+                <input type="text" id="BrokerClientID" name="BrokerClientID" required>
+            </div>
+            <div class="form-group">
+                <label for="ClientAPIKey">Broker API Key:</label>
+                <input type="text" id="ClientAPIKey" name="ClientAPIKey" required>
+            </div>
+            <div class="form-group">
+                <label for="ClientSecretKey">Broker Secret Key:</label>
+                <input type="text" id="ClientSecretKey" name="ClientSecretKey" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register">
+            </div>
+        </form>
+    </div>
+
+    <!-- Run Form -->
+    <div class="run-form-container form-container" id="runForm">
+        <span class="close-btn" onclick="closeForm('runForm')">&times;</span>
+        <h2 id="runHeading">Run Form</h2>
+        <form id="RunForm" method="POST" action="/run_algo">
+            <div class="form-group">
+                <label for="AlgoNameRun">Algo Name:</label>
+                <input type="text" id="AlgoNameRun" name="AlgoNameRun" readonly>
+            </div>
+            <div class="form-group">
+                <label for="SelectLotSize">Invest in Lot Size:</label>
+                <input type="number" id="SelectLotSize" name="SelectLotSize" required>
+            </div>
+            <div class="form-group">
+                <label for="Password">Password:</label>
+                <input type="text" id="Password" name="Password" required>
+            </div>
+            <div class="form-group">
+                <label for="Authenticator">Authenticator:</label>
+                <input type="text" id="Authenticator" name="Authenticator" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Connect">
+            </div>
+        </form>
+    </div>
+       
+    <script>
+    function actionHandler(boxId, action) {
+        console.log(`Box ${boxId} clicked for ${action} action`);
+        // Implement your action handling logic here (e.g., using AJAX)
+        if (action === 'play') {
+            openRunForm();
+        } else if (action === 'pause') {
+            // Implement pause logic if needed
+        }
+    }
+
+    function openRegistrationForm(element) {
+        // Retrieve the data attributes from the clicked element's parent box
+        const box = element.closest('.box');
+        const heading = box.getAttribute('data-heading');
+        const subheading1 = box.getAttribute('data-subheading1');
+        
+        // Debugging: Log the values passed to the function
+        console.log(`openRegistrationForm called with heading: ${heading}, subheading: ${subheading1}`);
+        
+        // Populate the Algo Name field with the box heading
+        document.getElementById('Algoname').value = heading;
+
+        // Make an AJAX call to fetch the minimum fund required from the server
+        fetch(`/get_minimum_fund?algo_name=${heading}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.minimum_fund) {
+                    // Update the form with the fetched minimum fund required
+                    document.getElementById('MinimumFundRequirement').value = data.minimum_fund;
+                } else {
+                    console.error('Minimum fund required not found for the given algo name');
+                }
+            })
+            .catch(error => console.error('Error fetching minimum fund required:', error));
+
+        // Update the form heading
+        document.getElementById('registrationHeading').innerText = `Algo Registration Form: ${heading}`;
+        
+        // Show the registration form
+        document.getElementById('registrationForm').style.display = 'block';
+    }
+
+    function openRunForm() {
+        // Retrieve the data attributes from the clicked element's parent box
+        const box = document.querySelector('.box.box-registered'); // Adjust selector based on your logic
+        const heading = box.getAttribute('data-heading');
+        const subheading1 = box.getAttribute('data-subheading1');
+        
+        // Debugging: Log the values passed to the function
+        console.log(`openRunForm called with heading: ${heading}, subheading: ${subheading1}`);
+        
+        // Populate the Algo Name field with the box heading
+        document.getElementById('AlgoNameRun').value = heading;
+
+        // Update the form heading and subheading (if needed)
+        document.getElementById('runHeading').innerText = `Run Algo: ${heading}`;
+        
+        // Show the run form
+        document.getElementById('runForm').style.display = 'block';
+    }
+
+    function closeForm(formId) {
+        document.getElementById(formId).style.display = 'none'; // Hide the form
+        document.getElementById(formId).reset(); // Reset form fields if needed
+    }
+</script>
+
+</body>
+</html>
+{% endblock %}
